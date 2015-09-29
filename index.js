@@ -27,6 +27,7 @@ app.on('activate-with-no-open-windows', () => {
 
 app.on('ready', () => {
   mainWindow = createMainWindow();
+  mainWindow.openDevTools();
   registerShortcut();
 });
 
