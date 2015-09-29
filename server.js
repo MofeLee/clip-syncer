@@ -7,7 +7,15 @@ io.on('connection', function(socket) {
   currentUserId = ++usercount;
   clients[currentUserId] = socket;
 
-  // 握手
+  remoteOk(currentUserId);
+  getUserLists(currentUserId);
+  disconnected(currentUserId);
+
+});
+
+function remoteOk(currentUserId){
+  var socket = clients[currentUserId];
+
   socket.emit('server-ok', {
     userid: currentUserId,
     msg: `user${usercount}成功连接到服务器`
@@ -20,17 +28,22 @@ io.on('connection', function(socket) {
     });
     console.log(data.msg);
   });
+}
 
+
+function getUserLists(currentUserId){
+  var socket = clients[currentUserId];
 
   socket.on('get user lists', function(){
-
     socket.emit('new message', {
       userid: 'server',
       msg: `[${Object.keys(clients)}]`
     });
   });
+}
 
-
+function disconnected(currentUserId){
+  var socket = clients[currentUserId];
 
   socket.on('disconnect', function() {
     console.log(`user${currentUserId}失去连接`);
@@ -39,4 +52,4 @@ io.on('connection', function(socket) {
       userid: currentUserId
     });
   });
-});
+}
