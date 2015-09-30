@@ -10,7 +10,6 @@ io.on('connection', function(socket) {
   remoteOk(currentUserId);
   getUserLists(currentUserId);
   disconnected(currentUserId);
-
 });
 
 function remoteOk(currentUserId){

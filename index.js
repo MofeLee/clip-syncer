@@ -3,6 +3,12 @@ const app = require('app');
 const BrowserWindow = require('browser-window');
 const globalShortcut = require('global-shortcut');
 const clipboard = require('clipboard');
+const ipc = require('ipc');
+
+ipc.on('ipc-message', function(event, arg){
+  console.log(arg);
+  event.sender.send('ipc-reply', 'pong');
+});
 
 // report crashes to the Electron project
 require('crash-reporter').start();

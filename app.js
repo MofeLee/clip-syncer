@@ -1,3 +1,4 @@
+const ipc = require('ipc');
 var userid;
 var client;
 
@@ -7,6 +8,12 @@ module.exports = function(io) {
   serverOk(client);
   newMessage(client);
   disconnected(client);
+
+  // client's services
+  client.getUserLists = getUserLists(client);
+
+  // ipc methods
+  client.sendIpcTestMsg = sendIpcTestMsg;
 
   return client;
 };
@@ -36,5 +43,18 @@ function disconnected(client) {
       console.log(`user${data.userid}退出了连接`);
     });
   });
+}
+//////////////////// client's services
+function getUserLists(client){
+  return function(){
+    client.emit('get user lists');
+  };
+}
 
+function sendIpcTestMsg(){
+  ipc.on('ipc-reply', function(arg){
+    console.log(arg);
+  });
+
+  ipc.send('ipc-message', 'ping');
 }
